@@ -18,13 +18,13 @@ export default async function TopNav() {
   const user = await currentUser();
 
   return (
-    <Menubar className="flex items-center rounded-none h-14">
+    <Menubar className="flex items-center rounded-none h-14 bg-gray-50 text-black">
       <div className="flex-none">
         <MenubarMenu>
           <Link href="/">
             <Image
               src="/logo.png"
-              alt="ai video generator logo"
+              alt="Ai video generator logo"
               width={50}
               height={50}
             />
