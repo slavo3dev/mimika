@@ -1,6 +1,8 @@
 {
   "name": "MimiKa",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "description": "AI Video Generator for Educational Content",
+  "author": "slavo.io",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
