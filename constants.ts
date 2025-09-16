@@ -9,13 +9,16 @@ export type StyleOption = {
 };
 
 export const storyOptions: StoryOption[] = [
-  { type: "preset", label: "Adventure Story" },
-  { type: "preset", label: "Funny Story" },
-  { type: "preset", label: "Scary Story" },
-  { type: "preset", label: "Inspirational Story" },
-  { type: "preset", label: "Romantic Story" },
-  { type: "preset", label: "Sci-Fi Story" },
-  { type: "preset", label: "Thriller Story" },
+  { type: "preset", label: "JavaScript / TypeScript" },
+  { type: "preset", label: "Python" },
+  { type: "preset", label: "Programming Concepts" },
+  { type: "preset", label: "Math" },
+  { type: "preset", label: "Science" },
+  { type: "preset", label: "History" },
+  { type: "preset", label: "Productivity & Learning" },
+  { type: "preset", label: "Business & Startups" },
+  { type: "preset", label: "AI & Machine Learning" },
+  { type: "preset", label: "Design & Creativity" },
   { type: "custom", label: "Custom Prompt" },
 ];
 

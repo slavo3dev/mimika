@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
 import { useVideo } from "@/context/video";
-import { createVideoAi } from "@/actions/geminiai";
 import { Button } from "@/components/ui/button";
 import { storyOptions, styleOptions } from "@/constants";
 import Image from "next/image";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, Sparkles, Palette } from "lucide-react";
 import LoadingModal from "@/components/modal/loading";
 import RemotionPlayer from "@/components/video/remotion-player";
 
@@ -24,122 +23,159 @@ export default function CreateVideoPage() {
     captions,
   } = useVideo();
 
+  const canGenerate = (!!selectedStory || !!customPrompt?.trim()) && !!selectedStyle;
+
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* Left: Controls */}
         <div className="order-2 lg:order-1">
-          <div className="p-10 bg-gray-800 text-white">
-            <h1 className="text-2xl font-bold mb-5">Create video page</h1>
+          <div className="p-8 lg:p-10 bg-gray-900 text-white font-[Inter]">
+            {/* Title */}
+            <div className="mb-6">
+              <h1 className="text-3xl lg:text-4xl font-bold tracking-tight">
+                Create a Short Video
+              </h1>
+              <p className="mt-2 text-sm text-gray-300">
+                Perfect for Instagram Reels, TikTok, YouTube Shorts, and quick visual learning.
+              </p>
+            </div>
 
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold mb-4">
-                Select a Story Type of Enter Custom Prompt
-              </h2>
+            {/* Story / Prompt */}
+            <div className="mb-10">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-4 h-4 opacity-80" />
+                <h2 className="text-xl font-semibold tracking-tight">Story Blueprint</h2>
+              </div>
+              <p className="text-xs text-gray-400 mb-4">
+                Pick a ready-made concept or write your own prompt.
+              </p>
 
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                 {storyOptions.map((story) => (
                   <div key={story.label} className="h-auto">
                     {story.type === "custom" ? (
-                      <>
-                        <input
-                          type="text"
-                          value={customPrompt}
-                          onChange={handleCustomPromptChange}
-                          placeholder="Enter custom prompt"
-                          className={`h-12 w-full bg-gray-700 text-white border-2 text-xs ${
-                            selectedStory === "Custom Prompt"
-                              ? "border-blue-500"
-                              : "border-gray-500"
-                          } focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2`}
-                        />
-                      </>
+                      <input
+                        type="text"
+                        value={customPrompt}
+                        onChange={handleCustomPromptChange}
+                        placeholder="Describe your idea…"
+                        className={`h-12 w-full bg-gray-800/80 placeholder-gray-400 text-white border text-sm rounded-xl px-3 outline-none
+                          focus:ring-2 focus:ring-blue-500/70 focus:border-blue-500/70
+                          ${selectedStory === "Custom Prompt" ? "border-blue-500" : "border-gray-700"}`}
+                      />
                     ) : (
-                      <>
-                        <Button
-                          onClick={() => handleStorySelect(story.label)}
-                          variant="outline"
-                          className={`h-12 w-full bg-gray-700 text-white border-2 text-xs ${
-                            selectedStory === story.label
-                              ? "bg-blue-500 text-white border-blue-500"
-                              : "bg-gray-700 text-gray-300 border-gray-500"
-                          } rounded-lg p-2`}
-                        >
-                          {story.label}
-                        </Button>
-                      </>
+                      <Button
+                        onClick={() => handleStorySelect(story.label)}
+                        variant="outline"
+                        aria-pressed={selectedStory === story.label}
+                        className={`
+                          h-12 w-full rounded-xl text-sm transition-all
+                          border-2 
+                          ${selectedStory === story.label
+                            ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-600/20"
+                            : "bg-gray-800/80 text-gray-200 border-gray-700 hover:bg-gray-800 hover:border-gray-600"}
+                        `}
+                      >
+                        {story.label}
+                      </Button>
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold mb-4">
-                Select A Video Style
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {styleOptions.map((style) => (
-                  <div
-                    key={style.name}
-                    onClick={() => handleStyleSelect(style.name)}
-                    className={`relative cursor-pointer rounded-lg transition-all duration-200 aspect-square overflow-hidden ${
-                      selectedStyle === style.name
-                        ? "ring-4 ring-blue-500 ring-offset-4 ring-offset-gray-800"
-                        : "hover:scale-105"
-                    }`}
-                  >
-                    <Image
-                      src={style.image}
-                      alt={style.name}
-                      layout="fill"
-                      objectFit="cover"
-                      className={`transition-transform duration-200 ${
-                        selectedStyle === style.name ? "scale-105" : ""
-                      }`}
-                    />
+            {/* Style */}
+            <div className="mb-10">
+              <div className="flex items-center gap-2 mb-3">
+                <Palette className="w-4 h-4 opacity-80" />
+                <h2 className="text-xl font-semibold tracking-tight">Visual Style</h2>
+              </div>
+              <p className="text-xs text-gray-400 mb-4">
+                Choose the look & feel for your short.
+              </p>
 
-                    <div
-                      className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
-                        selectedStyle === style.name
-                          ? "bg-transparent"
-                          : "bg-black bg-opacity-40"
-                      }`}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {styleOptions.map((style) => {
+                  const selected = selectedStyle === style.name;
+                  return (
+                    <button
+                      key={style.name}
+                      onClick={() => handleStyleSelect(style.name)}
+                      aria-label={`Select ${style.name} style`}
+                      aria-selected={selected}
+                      className={`relative group cursor-pointer rounded-2xl transition-all duration-200 aspect-square overflow-hidden outline-none
+                        ring-offset-4 ring-offset-gray-900
+                        ${selected ? "ring-4 ring-blue-500 scale-[1.01]" : "hover:scale-[1.02] focus:ring-4 focus:ring-blue-400/60"}
+                      `}
                     >
-                      <span className="font-semibold text-white text-lg">
-                        {style.name}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                      <Image
+                        src={style.image}
+                        alt={style.name}
+                        fill
+                        className={`object-cover transition-transform duration-200 ${selected ? "scale-105" : "group-hover:scale-105"}`}
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        priority={false}
+                      />
+                      <div className={`absolute inset-0 flex items-end p-3 transition
+                        ${selected ? "bg-black/10" : "bg-black/35 group-hover:bg-black/25"}`}>
+                        <span className={`px-2.5 py-1 rounded-lg text-xs font-medium
+                          ${selected ? "bg-blue-600/90 text-white" : "bg-gray-900/70 text-gray-100"}`}>
+                          {style.name}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            <Button
-              onClick={handleSubmit}
-              disabled={(!selectedStory && !customPrompt) || !selectedStyle}
-              className="w-full h-12 bg-green-500 text-white text-lg rounded hover:bg-green-700"
-            >
-              {loading && (
-                <Loader2Icon size={24} className="mr-4 animate-spin" />
-              )}{" "}
-              Create Video
-            </Button>
+            {/* Generate */}
+            <div className="space-y-2">
+              <Button
+                onClick={handleSubmit}
+                disabled={!canGenerate || loading}
+                className={`w-full h-12 rounded-xl text-base font-semibold tracking-tight transition
+                  ${canGenerate && !loading
+                    ? "bg-green-500 hover:bg-green-600"
+                    : "bg-green-900/40 cursor-not-allowed"}`}
+              >
+                {loading ? (
+                  <span className="inline-flex items-center">
+                    <Loader2Icon size={22} className="mr-3 animate-spin" />
+                    Generating…
+                  </span>
+                ) : (
+                  "Generate Short"
+                )}
+              </Button>
+              <p className="text-[11px] text-gray-400">
+                Tip: Strong prompts mention <span className="text-gray-200">topic</span>, <span className="text-gray-200">tone</span>, and <span className="text-gray-200">target platform</span>.
+              </p>
+            </div>
 
             <LoadingModal />
-
-            {/* <pre>{JSON.stringify(images, null, 4)}</pre>
-            <pre>{JSON.stringify(audio, null, 4)}</pre>
-            <pre>{JSON.stringify(captions, null, 4)}</pre> */}
           </div>
         </div>
 
-        <div className="flex justify-center items-center vh-100 order-1 lg:order-2">
+        {/* Right: Preview */}
+        <div className="flex justify-center items-center min-h-[60vh] bg-black order-1 lg:order-2">
           {images && audio && captions ? (
-            <div className="flex justify-center p-10">
+            <div className="flex justify-center p-6 lg:p-10 w-full">
               <RemotionPlayer />
             </div>
           ) : (
-            <p className="text-center my-10">No video data</p>
+            <div className="text-center px-8 py-12 font-[Inter]">
+              <h3 className="text-xl font-semibold tracking-tight text-gray-200">
+                No Preview Available
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-gray-400 max-w-md mx-auto">
+                Choose a <span className="text-gray-100 font-medium">Story Blueprint </span>  
+                and a <span className="text-gray-100 font-medium">Visual Style</span>,  
+                then click <span className="text-gray-100 font-medium">Generate Short</span>  
+                to see your video here.
+              </p>
+            </div>
           )}
         </div>
       </div>
