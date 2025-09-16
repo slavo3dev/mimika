@@ -9,17 +9,17 @@ export type StyleOption = {
 };
 
 export const storyOptions: StoryOption[] = [
-  { type: "preset", label: "JavaScript / TypeScript" },
-  { type: "preset", label: "Python" },
-  { type: "preset", label: "Programming Concepts" },
-  { type: "preset", label: "Math" },
-  { type: "preset", label: "Science" },
-  { type: "preset", label: "History" },
-  { type: "preset", label: "Productivity & Learning" },
-  { type: "preset", label: "Business & Startups" },
-  { type: "preset", label: "AI & Machine Learning" },
-  { type: "preset", label: "Design & Creativity" },
-  { type: "custom", label: "Custom Prompt" },
+  { type: "preset", label: "👉 What is a Function in Python?" },
+  { type: "preset", label: "👉 How Do Variables Work in JavaScript / TypeScript?" },
+  { type: "preset", label: "👉 What Does 'Clean Code' Mean in Programming?" },
+  { type: "preset", label: "👉 Why Do We Need Algorithms in Math?" },
+  { type: "preset", label: "👉 What’s the Scientific Method?" },
+  { type: "preset", label: "👉 Key Events that Shaped History" },
+  { type: "preset", label: "👉 How to Learn Faster & Stay Productive" },
+  { type: "preset", label: "👉 What Makes a Startup Succeed?" },
+  { type: "preset", label: "👉 What is Machine Learning & Why It Matters" },
+  { type: "preset", label: "👉 What is Design Thinking in Creativity?" },
+  { type: "custom", label: "✍️ Write Your Own Prompt" },
 ];
 
 export const styleOptions: StyleOption[] = [
